@@ -1,0 +1,102 @@
+## About
+
+The majortom module provides Go bindings for the libhbsdcontrol
+library for the [HardenedbSD](https://git.hardenedbsd.org/hardenedbsd/hardenedbsd)
+operating system.
+
+## Motivation
+
+### lyrics
+
+[David Bowie: Space Odyessy](https://www.youtube.com/watch?v=9_M3uw29U1U)
+
+> Ground control to Major Tom
+> Ground control to Major Tom
+> Take your protein pills and put your helmet on (ten)
+
+> Ground control to Major Tom (nine, eight, seven, six)
+> Commencing countdown, engines on (five, four, three, two)
+> Check ignition, and may God's love be with you (one, lift off)
+
+> This is ground control to Major Tom
+> You've really made the grade
+> And the papers want to know whose shirts you wear
+> Now it's time to leave the capsule, if you dare
+
+> This is Major Tom to ground control
+> I'm stepping through the door
+> And I'm floating in the most peculiar way
+> And the stars look very different today
+
+## Examples
+
+### control
+
+The control package can enable or disable security features
+that are managed by the [HardenedBSD](https://hardenedbsd.org)
+kernel on a per-file basis. Unlike other packages this one
+happens to not be pure Go and requires C code to be compiled.
+That's because HardenedBSD does not implement its own system calls
+because they could conflict with FreeBSD, and HardenedBSD regularly
+synchronizes updates from FreeBSD.
+
+Given that context, HardenedBSD does not provide system calls
+that can enable or disable feature state, and that leaves the
+primary interface as the C libraries that HardenedBSD does
+provide. In this case, that interface is
+[libhbsdcontrol](https://git.hardenedbsd.org/hardenedbsd/hardenebsd).
+
+The following example queries a list of feature names, and then proceeds
+to enable, disable and restore the system default for the "mprotect"
+feature. As a final step, we query the status of the "mprotect" feature.
+Each method in the example is scoped to the `/usr/bin/mdo` binary:
+
+```go
+package main
+
+import (
+	"github.com/0x1eef/majortom/control"
+)
+
+func main() {
+	ctx := control.New(control.Namespace("system"))
+	if features, err := ctx.FeatureNames(); err != nil {
+		panic(err)
+	} else {
+		for _, name := range features {
+			fmt.Printf("feature: %s\n", name)
+		}
+		if err := ctx.Enable("mprotect", "/usr/bin/mdo"); err != nil {
+			panic(err)
+		}
+		if err := ctx.Disable("mprotect", "/usr/bin/mdo"); err != nil {
+			panic(err)
+		}
+		if err := ctx.Sysdef("mprotect", "/usr/bin/mdo"); err != nil {
+			panic(err)
+		}
+		if status, err := ctx.Status("mprotect", "/usr/bin/mdo"); err == nil {
+			fmt.Printf("The mprotect feature has the status: %s\n", status)
+		}
+	}
+}
+```
+
+
+## Install
+
+The install process is more or less straight forward
+
+    go get github.com/0x1eef/majortom
+
+## Sources
+
+* [github.com/@0x1eef](https://github.com/0x1eef/majortom#readme)
+* [gitlab.com/@0x1eef](https://gitlab.com/0x1eef/majortom#about)
+* [hardenedbsd.org/@0x1eef](https://git.HardenedBSD.org/0x1eef/majortom#about)
+
+## License
+
+[BSD Zero Clause](https://choosealicense.com/licenses/0bsd/)
+<br>
+See [LICENSE](./LICENSE)
