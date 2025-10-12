@@ -8,7 +8,7 @@ operating system.
 
 ### Lyrics
 
-[David Bowie: Space Odyessy](https://www.youtube.com/watch?v=9_M3uw29U1U)
+* [David Bowie: Space Odyessy](https://www.youtube.com/watch?v=9_M3uw29U1U)
 
 > Ground control to Major Tom <br>
 > Ground control to Major Tom <br>
@@ -17,16 +17,16 @@ operating system.
 > Commencing countdown, engines on (five, four, three, two) <br>
 > Check ignition, and may God's love be with you (one, lift off) <br>
 
-[David Bowie: Ashes to Ashes](https://www.youtube.com/watch?v=wBDD37Xv6A0)
+* [David Bowie: Ashes to Ashes](https://www.youtube.com/watch?v=RdaC0SlzPxg)
 
 > Do you remember a guy that's been <br>
 > In such an early song? <br>
 > I've heard a rumour from Ground Control <br>
 > Oh no, don't say it's true! <br>
-> Ashes to ashes and funk to funky
-> We know Major Tom's a junkie
-> Strung out in heaven's high
-> Hitting an all-time low
+> Ashes to ashes and funk to funky <br>
+> We know Major Tom's a junkie <br>
+> Strung out in heaven's high <br>
+> Hitting an all-time low <br>
 
 ## Examples
 
