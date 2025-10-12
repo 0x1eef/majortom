@@ -1,7 +1,7 @@
 ## About
 
 The majortom module provides Go bindings for the libhbsdcontrol
-library for the [HardenedbSD](https://git.hardenedbsd.org/hardenedbsd/hardenedbsd)
+library for the [HardenedBSD](https://git.hardenedbsd.org/hardenedbsd/hardenedbsd)
 operating system.
 
 ## Motivation
