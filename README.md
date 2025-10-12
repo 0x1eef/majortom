@@ -6,27 +6,17 @@ operating system.
 
 ## Motivation
 
-### lyrics
+### Lyrics
 
 [David Bowie: Space Odyessy](https://www.youtube.com/watch?v=9_M3uw29U1U)
 
-> Ground control to Major Tom
-> Ground control to Major Tom
-> Take your protein pills and put your helmet on (ten)
+> Ground control to Major Tom <br>
+> Ground control to Major Tom <br>
+> Take your protein pills and put your helmet on (ten) <br>
+> Ground control to Major Tom (nine, eight, seven, six) <br>
+> Commencing countdown, engines on (five, four, three, two) <br>
+> Check ignition, and may God's love be with you (one, lift off) <br>
 
-> Ground control to Major Tom (nine, eight, seven, six)
-> Commencing countdown, engines on (five, four, three, two)
-> Check ignition, and may God's love be with you (one, lift off)
-
-> This is ground control to Major Tom
-> You've really made the grade
-> And the papers want to know whose shirts you wear
-> Now it's time to leave the capsule, if you dare
-
-> This is Major Tom to ground control
-> I'm stepping through the door
-> And I'm floating in the most peculiar way
-> And the stars look very different today
 
 ## Examples
 
@@ -55,7 +45,8 @@ Each method in the example is scoped to the `/usr/bin/mdo` binary:
 package main
 
 import (
-	"github.com/0x1eef/majortom/control"
+	"fmt"
+	"github.com/0x1eef/bsd/control"
 )
 
 func main() {
@@ -75,13 +66,14 @@ func main() {
 		if err := ctx.Sysdef("mprotect", "/usr/bin/mdo"); err != nil {
 			panic(err)
 		}
-		if status, err := ctx.Status("mprotect", "/usr/bin/mdo"); err == nil {
+		if status, err := ctx.Status("mprotect", "/usr/bin/mdo"); err != nil {
+			panic(err)
+		} else {
 			fmt.Printf("The mprotect feature has the status: %s\n", status)
 		}
 	}
 }
 ```
-
 
 ## Install
 
