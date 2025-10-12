@@ -7,3 +7,6 @@ fmt:
 	for go in control/*.go; do \
 		go fmt $$go; \
 	done; \
+
+test:
+	cd control/ && go test
