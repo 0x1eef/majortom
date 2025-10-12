@@ -56,7 +56,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/0x1eef/bsd/control"
+	"github.com/0x1eef/majortom/control"
 )
 
 func main() {
