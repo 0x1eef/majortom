@@ -6,7 +6,7 @@ operating system.
 
 ## Motivation
 
-### Lyrics
+#### Lyrics
 
 * [David Bowie: Space Odyessy](https://www.youtube.com/watch?v=9_M3uw29U1U)
 
@@ -30,7 +30,7 @@ operating system.
 
 ## Examples
 
-### control
+#### control
 
 The control package can enable or disable security features
 that are managed by the [HardenedBSD](https://hardenedbsd.org)
@@ -61,6 +61,7 @@ import (
 
 func main() {
 	ctx := control.New(control.Namespace("system"))
+	defer ctx.Free()
 	if features, err := ctx.FeatureNames(); err != nil {
 		panic(err)
 	} else {
