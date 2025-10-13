@@ -37,7 +37,7 @@ import (
 )
 
 func main() {
-	ctx := control.New(control.Namespace("system"))
+	ctx := control.NewContext(control.Namespace("system"))
 	defer ctx.Free()
 	if features, err := ctx.FeatureNames(); err != nil {
 		panic(err)
@@ -81,7 +81,7 @@ import (
 )
 
 func worker() {
-	ctx := control.New(control.Namespace("system"))
+	ctx := control.NewContext(control.Namespace("system"))
 	defer ctx.Free()
 }
 

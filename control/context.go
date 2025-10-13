@@ -21,7 +21,7 @@ type Context struct {
 	ptr       *C.struct__hbsdctrl_ctx
 }
 
-func New(opts ...Option) Context {
+func NewContext(opts ...Option) Context {
 	ctx := Context{namespace: "system", flags: 0}
 	for _, set := range opts {
 		set(&ctx)
