@@ -37,27 +37,31 @@ import (
 )
 
 func main() {
-	ctx := control.NewContext(control.Namespace("system"))
-	defer ctx.Free()
-	if features, err := ctx.FeatureNames(); err != nil {
+	ns := control.Namespace("system")
+	if ctx, err := control.NewContext(ns); err != nil {
 		panic(err)
 	} else {
-		for _, name := range features {
-			fmt.Printf("feature: %s\n", name)
-		}
-		if err := ctx.Enable("mprotect", "/usr/bin/mdo"); err != nil {
-			panic(err)
-		}
-		if err := ctx.Disable("mprotect", "/usr/bin/mdo"); err != nil {
-			panic(err)
-		}
-		if err := ctx.Sysdef("mprotect", "/usr/bin/mdo"); err != nil {
-			panic(err)
-		}
-		if status, err := ctx.Status("mprotect", "/usr/bin/mdo"); err != nil {
+		defer ctx.Free()
+		if features, err := ctx.FeatureNames(); err != nil {
 			panic(err)
 		} else {
-			fmt.Printf("The mprotect feature has the status: %s\n", status)
+			for _, name := range features {
+				fmt.Printf("feature: %s\n", name)
+			}
+			if err := ctx.Enable("mprotect", "/usr/bin/mdo"); err != nil {
+				panic(err)
+			}
+			if err := ctx.Disable("mprotect", "/usr/bin/mdo"); err != nil {
+				panic(err)
+			}
+			if err := ctx.Sysdef("mprotect", "/usr/bin/mdo"); err != nil {
+				panic(err)
+			}
+			if status, err := ctx.Status("mprotect", "/usr/bin/mdo"); err != nil {
+				panic(err)
+			} else {
+				fmt.Printf("The mprotect feature has the status: %s\n", status)
+			}
 		}
 	}
 }
@@ -81,8 +85,12 @@ import (
 )
 
 func worker() {
-	ctx := control.NewContext(control.Namespace("system"))
-	defer ctx.Free()
+	ns := control.Namespace("system")
+	if ctx, err := control.NewContext(); err != nil {
+		panic(err)
+	} else {
+		defer ctx.Free()
+	}
 }
 
 func main() {

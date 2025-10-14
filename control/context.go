@@ -12,7 +12,8 @@ import (
 )
 
 var (
-	ErrUseAfterFree = errors.New("the context has been freed")
+	ErrUseAfterFree = errors.New("context has been freed")
+	ErrNullPtr			= errors.New("null pointer")
 )
 
 type Context struct {
@@ -21,14 +22,17 @@ type Context struct {
 	ptr       *C.struct__hbsdctrl_ctx
 }
 
-func NewContext(opts ...Option) Context {
+func NewContext(opts ...Option) (Context, error) {
 	ctx := Context{namespace: "system", flags: 0}
 	for _, set := range opts {
 		set(&ctx)
 	}
 	flags, ns := C.hbsdctrl_flag_t(ctx.flags), C.CString(ctx.namespace)
-	ctx.ptr = C.hbsdctrl_ctx_new(flags, ns)
-	return ctx
+	if ctx.ptr = C.hbsdctrl_ctx_new(flags, ns); ctx.ptr == nil {
+		return Context{}, ErrNullPtr
+	} else {
+		return ctx, nil
+	}
 }
 
 func (ctx *Context) FeatureNames() ([]string, error) {
@@ -38,11 +42,12 @@ func (ctx *Context) FeatureNames() ([]string, error) {
 		names := []string{}
 		cary := C.hbsdctrl_ctx_all_feature_names(ctx.ptr)
 		if cary == nil {
-			return names, errors.New("null pointer")
+			return names, ErrNullPtr
+		} else {
+			defer C.hbsdctrl_ctx_free_feature_names(cary)
+			names = gostrings(cary)
+			return names, nil
 		}
-		defer C.hbsdctrl_ctx_free_feature_names(cary)
-		names = gostrings(cary)
-		return names, nil
 	}
 }
 
