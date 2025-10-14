@@ -1,7 +1,11 @@
 package control
 
+/*
+	#include <stdlib.h>
+*/
+import "C"
+
 import (
-	"C"
 	"errors"
 	"syscall"
 	"unsafe"
@@ -29,5 +33,13 @@ func handle(result C.int) error {
 		return errors.New("an unknown error happened")
 	} else {
 		return syscall.Errno(result)
+	}
+}
+
+func free(objects ...*C.char) {
+	for _, object := range objects {
+		if object != nil {
+			C.free(unsafe.Pointer(object))
+		}
 	}
 }

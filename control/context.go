@@ -27,8 +27,9 @@ func NewContext(opts ...Option) (Context, error) {
 	for _, set := range opts {
 		set(&ctx)
 	}
-	flags, ns := C.hbsdctrl_flag_t(ctx.flags), C.CString(ctx.namespace)
-	if ctx.ptr = C.hbsdctrl_ctx_new(flags, ns); ctx.ptr == nil {
+	cFlags, cNamespace := C.hbsdctrl_flag_t(ctx.flags), C.CString(ctx.namespace)
+	defer free(cNamespace)
+	if ctx.ptr = C.hbsdctrl_ctx_new(cFlags, cNamespace); ctx.ptr == nil {
 		return Context{}, ErrNullPtr
 	} else {
 		return ctx, nil
@@ -40,12 +41,12 @@ func (ctx *Context) FeatureNames() ([]string, error) {
 		return []string{}, ErrUseAfterFree
 	} else {
 		names := []string{}
-		cary := C.hbsdctrl_ctx_all_feature_names(ctx.ptr)
-		if cary == nil {
+		cNames := C.hbsdctrl_ctx_all_feature_names(ctx.ptr)
+		if cNames == nil {
 			return names, ErrNullPtr
 		} else {
-			defer C.hbsdctrl_ctx_free_feature_names(cary)
-			names = gostrings(cary)
+			defer C.hbsdctrl_ctx_free_feature_names(cNames)
+			names = gostrings(cNames)
 			return names, nil
 		}
 	}
@@ -56,9 +57,11 @@ func (ctx *Context) Status(feature, path string) (string, error) {
 		return "", ErrUseAfterFree
 	} else {
 		cStatus, cFeature, cPath := C.CString(""), C.CString(feature), C.CString(path)
+		defer free(cStatus, cFeature, cPath)
 		cPtr := (**C.char)(unsafe.Pointer(&cStatus))
 		result := C.feature_status(ctx.ptr, cFeature, cPath, cPtr)
 		if result == 0 {
+			defer free(cStatus)
 			return C.GoString(cStatus), nil
 		} else {
 			return "", handle(result)
@@ -105,25 +108,34 @@ func (ctx *Context) IsSysdef(feature, path string) (bool, error) {
 func (ctx *Context) Enable(feature, path string) error {
 	if ctx.ptr == nil {
 		return ErrUseAfterFree
+	} else {
+		cFeature, cPath := C.CString(feature), C.CString(path)
+		defer free(cFeature, cPath)
+		result := C.enable_feature(ctx.ptr, cFeature, cPath)
+		return handle(result)
 	}
-	result := C.enable_feature(ctx.ptr, C.CString(feature), C.CString(path))
-	return handle(result)
 }
 
 func (ctx *Context) Disable(feature, path string) error {
 	if ctx.ptr == nil {
 		return ErrUseAfterFree
+	} else {
+		cFeature, cPath := C.CString(feature), C.CString(path)
+		defer free(cFeature, cPath)
+		result := C.disable_feature(ctx.ptr, cFeature, cPath)
+		return handle(result)
 	}
-	result := C.disable_feature(ctx.ptr, C.CString(feature), C.CString(path))
-	return handle(result)
 }
 
 func (ctx *Context) Sysdef(feature, path string) error {
 	if ctx.ptr == nil {
 		return ErrUseAfterFree
+	} else {
+		cFeature, cPath := C.CString(feature), C.CString(path)
+		defer free(cFeature, cPath)
+		result := C.sysdef_feature(ctx.ptr, cFeature, cPath)
+		return handle(result)
 	}
-	result := C.sysdef_feature(ctx.ptr, C.CString(feature), C.CString(path))
-	return handle(result)
 }
 
 func (ctx *Context) Free() {
