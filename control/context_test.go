@@ -2,6 +2,7 @@ package control
 
 import (
 	"testing"
+	"errors"
 )
 
 func TestDefaultNamespace(t *testing.T) {
@@ -29,5 +30,17 @@ func TestFeatureNames(t *testing.T) {
 		if len(names) == 0 {
 			t.Fatalf("The FeatureNames method has zero features")
 		}
+	}
+}
+
+func TestUseAfterFree(t *testing.T) {
+	ctx, _ := NewContext(Namespace("user"))
+	ctx.Free()
+	if _, err := ctx.FeatureNames(); err != nil {
+		if !errors.Is(err, ErrUseAfterFree) {
+			t.Fatalf("The FeatureNames method returned an unexpected error: %s", err)
+		}
+	} else {
+		t.Fatalf("The FeatureNames method should have returned an error, but did not")
 	}
 }
