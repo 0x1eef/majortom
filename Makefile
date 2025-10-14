@@ -1,4 +1,4 @@
-.PHONY: fmt
+all: test
 
 fmt:
 	for c in control/*.c control/*.h; do \
@@ -8,3 +8,5 @@ fmt:
 
 test:
 	cd control/ && go test
+
+.PHONY: fmt
