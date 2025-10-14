@@ -13,7 +13,7 @@ import (
 
 var (
 	ErrUseAfterFree = errors.New("context has been freed")
-	ErrNullPtr			= errors.New("null pointer")
+	ErrNullPtr      = errors.New("null pointer")
 )
 
 type Context struct {
