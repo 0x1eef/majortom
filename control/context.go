@@ -34,14 +34,12 @@ func (ctx *Context) FeatureNames() ([]string, error) {
 	if ctx.ptr == nil {
 		return []string{}, ErrUseAfterFree
 	} else {
-		names := []string{}
 		cNames := C.hbsdctrl_ctx_all_feature_names(ctx.ptr)
 		if cNames == nil {
-			return names, ErrNullPtr
+			return []string{}, ErrNullPtr
 		} else {
 			defer C.hbsdctrl_ctx_free_feature_names(cNames)
-			names = gostrings(cNames)
-			return names, nil
+			return gostrings(cNames), nil
 		}
 	}
 }
