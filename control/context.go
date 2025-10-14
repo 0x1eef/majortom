@@ -7,17 +7,7 @@ package control
 import "C"
 
 import (
-	"errors"
 	"unsafe"
-)
-
-const (
-	Version = "0.1.0"
-)
-
-var (
-	ErrUseAfterFree = errors.New("context has been freed")
-	ErrNullPtr      = errors.New("null pointer")
 )
 
 type Context struct {
