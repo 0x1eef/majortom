@@ -21,12 +21,10 @@ C libraries that HardenedBSD does provide. In this case, that interface is
 
 ## Examples
 
-#### Control
+#### Features
 
-The following example queries a list of feature names, and then proceeds
-to enable, disable and restore the system default for the "mprotect"
-feature. As a final step, we query the status of the "mprotect" feature.
-Each method in the example is scoped to the `/usr/bin/mdo` binary:
+The following example demonstrates how to create an instance of
+`control.Context` and then how to query all feature names:
 
 ```go
 package main
@@ -42,30 +40,74 @@ func main() {
 		panic(err)
 	} else {
 		defer ctx.Free()
-		run(&ctx)
-	}
-}
-
-func run(ctx *control.Context) {
-	if features, err := ctx.FeatureNames(); err != nil {
-		panic(err)
-	} else {
-		for _, name := range features {
-			fmt.Printf("feature: %s\n", name)
-		}
-		if err := ctx.Enable("mprotect", "/usr/bin/mdo"); err != nil {
-			panic(err)
-		}
-		if err := ctx.Disable("mprotect", "/usr/bin/mdo"); err != nil {
-			panic(err)
-		}
-		if err := ctx.Sysdef("mprotect", "/usr/bin/mdo"); err != nil {
-			panic(err)
-		}
-		if status, err := ctx.Status("mprotect", "/usr/bin/mdo"); err != nil {
+		if features, err := ctx.FeatureNames(); err != nil {
 			panic(err)
 		} else {
-			fmt.Printf("The mprotect feature has the status: %s\n", status)
+			for _, name := range features {
+				fmt.Printf("feature: %s\n", name)
+			}
+		}
+	}
+}
+```
+
+#### Settings
+
+The next example shows how to enable, disable, and restore the system default
+settings for a given file and feature:
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/0x1eef/majortom/control"
+)
+
+func main() {
+	ns := control.Namespace("system")
+	if ctx, err := control.NewContext(ns); err != nil {
+		panic(err)
+	} else {
+		defer ctx.Free()
+		feature, target := "mprotect", "/usr/bin/mdo"
+		if err := ctx.Enable(feature, target); err != nil {
+			panic(err)
+		}
+		if err := ctx.Disable(feature, target); err != nil {
+			panic(err)
+		}
+		if err := ctx.Sysdef(feature, target); err != nil {
+			panic(err)
+		}
+	}
+}
+```
+
+#### Status
+
+The last example demonstrates how to query the status of a feature
+for a given file:
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/0x1eef/majortom/control"
+)
+
+func main() {
+	ns := control.Namespace("system")
+	if ctx, err := control.NewContext(ns); err != nil {
+		panic(err)
+	} else {
+		defer ctx.Free()
+		feature, target := "mprotect", "/usr/bin/mdo"
+		if status, err := ctx.Status(feature, target); err != nil {
+			panic(err)
+		} else {
+			fmt.Printf("The %s feature is %s\n", feature, status)
 		}
 	}
 }
@@ -90,7 +132,7 @@ import (
 
 func worker() {
 	ns := control.Namespace("system")
-	if ctx, err := control.NewContext(); err != nil {
+	if ctx, err := control.NewContext(ns); err != nil {
 		panic(err)
 	} else {
 		defer ctx.Free()
