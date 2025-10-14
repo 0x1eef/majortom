@@ -7,6 +7,6 @@ fmt:
 	go fmt ./...
 
 test:
-	cd control/ && go test
+	cd test/ && go test
 
-.PHONY: fmt
+.PHONY: all fmt test

@@ -1,34 +1,36 @@
-package control
+package test
 
 import (
 	"errors"
 	"testing"
+
+	"github.com/0x1eef/majortom/control"
 )
 
 func TestDefaultNamespace(t *testing.T) {
-	if ctx, err := NewContext(); err != nil {
+	if ctx, err := control.NewContext(); err != nil {
 		t.Fatalf("NewContext failure: %v", err)
 	} else {
 		defer ctx.Free()
-		if ctx.namespace != "system" {
-			t.Fatalf("The default namespace should be 'system' but got '%s'", ctx.namespace)
+		if ctx.Namespace() != "system" {
+			t.Fatalf("The default namespace should be 'system' but got '%s'", ctx.Namespace())
 		}
 	}
 }
 
 func TestUserNamespace(t *testing.T) {
-	if ctx, err := NewContext(Namespace("user")); err != nil {
+	if ctx, err := control.NewContext(control.Namespace("user")); err != nil {
 		t.Fatalf("NewContext failure: %v", err)
 	} else {
 		defer ctx.Free()
-		if ctx.namespace != "user" {
-			t.Fatalf("The namespace should have been 'user' but got '%s'", ctx.namespace)
+		if ctx.Namespace() != "user" {
+			t.Fatalf("The namespace should have been 'user' but got '%s'", ctx.Namespace())
 		}
 	}
 }
 
 func TestFeatureNames(t *testing.T) {
-	if ctx, err := NewContext(Namespace("user")); err != nil {
+	if ctx, err := control.NewContext(control.Namespace("user")); err != nil {
 		t.Fatalf("NewContext failure: %v", err)
 	} else {
 		defer ctx.Free()
@@ -43,12 +45,12 @@ func TestFeatureNames(t *testing.T) {
 }
 
 func TestUseAfterFree(t *testing.T) {
-	if ctx, err := NewContext(Namespace("user")); err != nil {
+	if ctx, err := control.NewContext(control.Namespace("user")); err != nil {
 		t.Fatalf("NewContext failure: %v", err)
 	} else {
 		ctx.Free()
 		if _, err := ctx.FeatureNames(); err != nil {
-			if !errors.Is(err, ErrUseAfterFree) {
+			if !errors.Is(err, control.ErrUseAfterFree) {
 				t.Fatalf("The FeatureNames method returned an unexpected error: %s", err)
 			}
 		} else {

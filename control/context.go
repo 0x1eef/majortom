@@ -130,6 +130,10 @@ func (ctx *Context) Sysdef(feature, path string) error {
 	}
 }
 
+func (ctx *Context) Namespace() string {
+	return ctx.namespace
+}
+
 func (ctx *Context) Free() {
 	ptr := (**C.struct__hbsdctrl_ctx)(unsafe.Pointer(&ctx.ptr))
 	C.hbsdctrl_ctx_free(ptr)
