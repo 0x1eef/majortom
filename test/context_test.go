@@ -44,6 +44,20 @@ func TestFeatureNames(t *testing.T) {
 	}
 }
 
+func TestStatus(t *testing.T) {
+	if ctx, err := control.NewContext(control.Namespace("user")); err != nil {
+		t.Fatalf("NewContext failure: %v", err)
+	} else {
+		if status, err := ctx.Status("mprotect", "/bin/ls"); err != nil {
+			t.Fatalf("Status failure: %v", err)
+		} else {
+			if status != "sysdef" {
+				t.Fatalf("expected 'sysdef' but got '%s'", status)
+			}
+		}
+	}
+}
+
 func TestUseAfterFree(t *testing.T) {
 	if ctx, err := control.NewContext(control.Namespace("user")); err != nil {
 		t.Fatalf("NewContext failure: %v", err)

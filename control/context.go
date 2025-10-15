@@ -48,12 +48,12 @@ func (ctx *Context) Status(feature, path string) (string, error) {
 	if ctx.ptr == nil {
 		return "", ErrUseAfterFree
 	} else {
-		cStatus, cFeature, cPath := C.CString(""), C.CString(feature), C.CString(path)
-		defer free(cStatus, cFeature, cPath)
+		var cStatus, cFeature, cPath *C.char
+		cFeature, cPath = C.CString(feature), C.CString(path)
+		defer free(cFeature, cPath)
 		cPtr := (**C.char)(unsafe.Pointer(&cStatus))
 		result := C.feature_status(ctx.ptr, cFeature, cPath, cPtr)
 		if result == 0 {
-			defer free(cStatus)
 			return C.GoString(cStatus), nil
 		} else {
 			return "", handle(result)
