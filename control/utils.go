@@ -11,17 +11,17 @@ import (
 	"unsafe"
 )
 
-func gostrings(cary **C.char) []string {
+func gostrings(cstr **C.char) []string {
 	var strings []string
-	ptr := uintptr(unsafe.Pointer(cary))
+	addr := uintptr(unsafe.Pointer(cstr))
 	offset := unsafe.Sizeof((*C.char)(nil))
 	for {
-		p := (**C.char)(unsafe.Pointer(ptr))
-		if *p == nil {
+		ptr := (**C.char)(unsafe.Pointer(addr))
+		if *ptr == nil {
 			break
 		}
-		strings = append(strings, C.GoString(*p))
-		ptr += offset
+		strings = append(strings, C.GoString(*ptr))
+		addr += offset
 	}
 	return strings
 }
