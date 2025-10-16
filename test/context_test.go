@@ -1,6 +1,7 @@
 package test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/0x1eef/majortom/control"
@@ -30,10 +31,16 @@ func TestFeatureNames(t *testing.T) {
 }
 
 func TestStatus(t *testing.T) {
+	file, err := os.CreateTemp("", "test")
+	AssertNil(t, err)
+	defer file.Close()
+	defer os.Remove(file.Name())
+
 	ctx, err := control.NewContext(control.Namespace("user"))
 	AssertNil(t, err)
 	defer ctx.Free()
-	status, err := ctx.Status("mprotect", "/bin/ls")
+
+	status, err := ctx.Status("mprotect", file.Name())
 	AssertNil(t, err)
 	AssertEqual(t, "sysdef", status)
 }
