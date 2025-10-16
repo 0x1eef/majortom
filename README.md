@@ -36,17 +36,18 @@ import (
 
 func main() {
 	ns := control.Namespace("system")
-	if ctx, err := control.NewContext(ns); err != nil {
+	ctx, err := control.NewContext(ns)
+	if err != nil {
 		panic(err)
-	} else {
-		defer ctx.Free()
-		if features, err := ctx.FeatureNames(); err != nil {
-			panic(err)
-		} else {
-			for _, name := range features {
-				fmt.Printf("feature: %s\n", name)
-			}
-		}
+	}
+	defer ctx.Free()
+
+	features, err := ctx.FeatureNames()
+	if err != nil {
+		panic(err)
+	}
+	for _, name := range features {
+		fmt.Printf("feature: %s\n", name)
 	}
 }
 ```
@@ -66,20 +67,21 @@ import (
 
 func main() {
 	ns := control.Namespace("system")
-	if ctx, err := control.NewContext(ns); err != nil {
+	ctx, err := control.NewContext(ns)
+	if err != nil {
 		panic(err)
-	} else {
-		defer ctx.Free()
-		feature, target := "mprotect", "/usr/bin/mdo"
-		if err := ctx.Enable(feature, target); err != nil {
-			panic(err)
-		}
-		if err := ctx.Disable(feature, target); err != nil {
-			panic(err)
-		}
-		if err := ctx.Sysdef(feature, target); err != nil {
-			panic(err)
-		}
+	}
+	defer ctx.Free()
+	
+	feature, target := "mprotect", "/usr/bin/mdo"
+	if err := ctx.Enable(feature, target); err != nil {
+		panic(err)
+	}
+	if err := ctx.Disable(feature, target); err != nil {
+		panic(err)
+	}
+	if err := ctx.Sysdef(feature, target); err != nil {
+		panic(err)
 	}
 }
 ```
@@ -99,17 +101,18 @@ import (
 
 func main() {
 	ns := control.Namespace("system")
-	if ctx, err := control.NewContext(ns); err != nil {
+	ctx, err := control.NewContext(ns)
+	if err != nil {
 		panic(err)
-	} else {
-		defer ctx.Free()
-		feature, target := "mprotect", "/usr/bin/mdo"
-		if status, err := ctx.Status(feature, target); err != nil {
-			panic(err)
-		} else {
-			fmt.Printf("The %s feature is %s\n", feature, status)
-		}
 	}
+	defer ctx.Free()
+
+	feature, target := "mprotect", "/usr/bin/mdo"
+	status, err := ctx.Status(feature, target)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("The %s feature is %s\n", feature, status)
 }
 ```
 
@@ -132,11 +135,11 @@ import (
 
 func worker() {
 	ns := control.Namespace("system")
-	if ctx, err := control.NewContext(ns); err != nil {
+	ctx, err := control.NewContext(ns)
+	if err != nil {
 		panic(err)
-	} else {
-		defer ctx.Free()
 	}
+	defer ctx.Free()
 }
 
 func main() {
