@@ -48,6 +48,8 @@ set_feature(hbsdctrl_ctx_t* ctx, const char* name, const char* path, int state)
         if (feature->hf_unapply(ctx, feature, &fd, NULL) == RES_FAIL) {
             res = -1;
             goto done;
+        } else {
+            errno = 0;
         }
     } else {
         if (feature->hf_apply(ctx, feature, &fd, &state) == RES_FAIL) {
