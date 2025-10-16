@@ -1,74 +1,47 @@
 package test
 
 import (
-	"errors"
 	"testing"
 
 	"github.com/0x1eef/majortom/control"
 )
 
 func TestDefaultNamespace(t *testing.T) {
-	if ctx, err := control.NewContext(); err != nil {
-		t.Fatalf("NewContext failure: %v", err)
-	} else {
-		defer ctx.Free()
-		if ctx.Namespace() != "system" {
-			t.Fatalf("The default namespace should be 'system' but got '%s'", ctx.Namespace())
-		}
-	}
+	ctx, err := control.NewContext()
+	AssertNil(t, err)
+	defer ctx.Free()
+	AssertEqual(t, "system", ctx.Namespace())
 }
 
 func TestUserNamespace(t *testing.T) {
-	if ctx, err := control.NewContext(control.Namespace("user")); err != nil {
-		t.Fatalf("NewContext failure: %v", err)
-	} else {
-		defer ctx.Free()
-		if ctx.Namespace() != "user" {
-			t.Fatalf("The namespace should have been 'user' but got '%s'", ctx.Namespace())
-		}
-	}
+	ctx, err := control.NewContext(control.Namespace("user"))
+	AssertNil(t, err)
+	defer ctx.Free()
+	AssertEqual(t, "user", ctx.Namespace())
 }
 
 func TestFeatureNames(t *testing.T) {
-	if ctx, err := control.NewContext(control.Namespace("user")); err != nil {
-		t.Fatalf("NewContext failure: %v", err)
-	} else {
-		defer ctx.Free()
-		if names, err := ctx.FeatureNames(); err != nil {
-			t.Fatalf("The FeatureNames method has an error: %s", err)
-		} else {
-			if len(names) == 0 {
-				t.Fatalf("The FeatureNames method has zero features")
-			}
-		}
-	}
+	ctx, err := control.NewContext(control.Namespace("user"))
+	AssertNil(t, err)
+	defer ctx.Free()
+	names, err := ctx.FeatureNames()
+	AssertNil(t, err)
+	AssertEqual(t, false, len(names) == 0)
 }
 
 func TestStatus(t *testing.T) {
-	if ctx, err := control.NewContext(control.Namespace("user")); err != nil {
-		t.Fatalf("NewContext failure: %v", err)
-	} else {
-		if status, err := ctx.Status("mprotect", "/bin/ls"); err != nil {
-			t.Fatalf("Status failure: %v", err)
-		} else {
-			if status != "sysdef" {
-				t.Fatalf("expected 'sysdef' but got '%s'", status)
-			}
-		}
-	}
+	ctx, err := control.NewContext(control.Namespace("user"))
+	AssertNil(t, err)
+	defer ctx.Free()
+	status, err := ctx.Status("mprotect", "/bin/ls")
+	AssertNil(t, err)
+	AssertEqual(t, "sysdef", status)
 }
 
 func TestUseAfterFree(t *testing.T) {
-	if ctx, err := control.NewContext(control.Namespace("user")); err != nil {
-		t.Fatalf("NewContext failure: %v", err)
-	} else {
-		ctx.Free()
-		if _, err := ctx.FeatureNames(); err != nil {
-			if !errors.Is(err, control.ErrUseAfterFree) {
-				t.Fatalf("The FeatureNames method returned an unexpected error: %s", err)
-			}
-		} else {
-			t.Fatalf("The FeatureNames method should have returned an error, but did not")
-		}
-	}
+	ctx, err := control.NewContext(control.Namespace("user"))
+	AssertNil(t, err)
+	ctx.Free()
+	_, err = ctx.FeatureNames()
+	AssertEqual(t, err, control.ErrUseAfterFree)
 }
