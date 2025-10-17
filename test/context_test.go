@@ -87,6 +87,51 @@ func TestSysdef(t *testing.T) {
 	AssertNil(t, err)
 }
 
+func TestIsSysdef(t *testing.T) {
+	file, err := os.CreateTemp("", "test")
+	AssertNil(t, err)
+	defer file.Close()
+	defer os.Remove(file.Name())
+
+	ctx, err := control.NewContext(control.Namespace("user"))
+	AssertNil(t, err)
+	defer ctx.Free()
+
+	isSysdef, err := ctx.IsSysdef("mprotect", file.Name())
+	AssertNil(t, err)
+	AssertEqual(t, true, isSysdef)
+}
+
+func TestIsEnabled(t *testing.T) {
+	file, err := os.CreateTemp("", "test")
+	AssertNil(t, err)
+	defer file.Close()
+	defer os.Remove(file.Name())
+
+	ctx, err := control.NewContext(control.Namespace("user"))
+	AssertNil(t, err)
+	defer ctx.Free()
+
+	isEnabled, err := ctx.IsEnabled("mprotect", file.Name())
+	AssertNil(t, err)
+	AssertEqual(t, false, isEnabled)
+}
+
+func TestIsDisabled(t *testing.T) {
+	file, err := os.CreateTemp("", "test")
+	AssertNil(t, err)
+	defer file.Close()
+	defer os.Remove(file.Name())
+
+	ctx, err := control.NewContext(control.Namespace("user"))
+	AssertNil(t, err)
+	defer ctx.Free()
+
+	isDisabled, err := ctx.IsDisabled("mprotect", file.Name())
+	AssertNil(t, err)
+	AssertEqual(t, false, isDisabled)
+}
+
 func TestUseAfterFree(t *testing.T) {
 	ctx, err := control.NewContext(control.Namespace("user"))
 	AssertNil(t, err)
