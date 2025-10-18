@@ -72,7 +72,7 @@ func main() {
 		panic(err)
 	}
 	defer ctx.Free()
-	
+
 	feature, target := "mprotect", "/usr/bin/mdo"
 	if err := ctx.Enable(feature, target); err != nil {
 		panic(err)
@@ -163,27 +163,12 @@ The install process is more or less straight forward
 
 ## Motivation
 
-#### Lyrics
-
-* [David Bowie: Space Odyessy](https://www.youtube.com/watch?v=9_M3uw29U1U)
-
-> Ground control to Major Tom <br>
-> Ground control to Major Tom <br>
-> Take your protein pills and put your helmet on (ten) <br>
-> Ground control to Major Tom (nine, eight, seven, six) <br>
-> Commencing countdown, engines on (five, four, three, two) <br>
-> Check ignition, and may God's love be with you (one, lift off) <br>
-
-* [David Bowie: Ashes to Ashes](https://www.youtube.com/watch?v=RdaC0SlzPxg)
-
-> Do you remember a guy that's been <br>
-> In such an early song? <br>
-> I've heard a rumour from Ground Control <br>
-> Oh no, don't say it's true! <br>
-> Ashes to ashes and funk to funky <br>
-> We know Major Tom's a junkie <br>
-> Strung out in heaven's high <br>
-> Hitting an all-time low <br>
+The main motivation behind this project was to learn more about Go.
+I was already familiar with the libhbsdcontrol interface, and since I
+stood to learn a lot in the process, I decided to create Go bindings
+for libhbsdcontrol. Over time the library has grown and improved as
+my Go skills also improved, and I ended up using it in a new utility
+I wrote named [control(8)](https://github.com/0x1eef/control).
 
 ## License
 
