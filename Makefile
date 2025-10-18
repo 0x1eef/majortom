@@ -9,4 +9,7 @@ fmt:
 test:
 	cd test/ && go test
 
+example:
+	go run ./examples/control/
+
 .PHONY: all fmt test
