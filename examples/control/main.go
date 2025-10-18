@@ -3,9 +3,17 @@ package main
 import (
 	"fmt"
 	"github.com/0x1eef/majortom/control"
+	"os"
 )
 
 func main() {
+	file, err := os.CreateTemp("", "test")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	defer os.Remove(file.Name())
+
 	ctx, err := control.NewContext(control.Namespace("user"))
 	if err != nil {
 		panic(err)
@@ -20,17 +28,18 @@ func main() {
 		fmt.Printf("feature: %s\n", name)
 	}
 
-	if err := ctx.Enable("mprotect", "/usr/bin/mdo"); err != nil {
+	feature, target := "mprotect", file.Name()
+	if err := ctx.Enable(feature, target); err != nil {
 		panic(err)
 	}
-	if err := ctx.Disable("mprotect", "/usr/bin/mdo"); err != nil {
+	if err := ctx.Disable(feature, target); err != nil {
 		panic(err)
 	}
-	if err := ctx.Sysdef("mprotect", "/usr/bin/mdo"); err != nil {
+	if err := ctx.Sysdef(feature, target); err != nil {
 		panic(err)
 	}
 
-	if status, err := ctx.Status("mprotect", "/usr/bin/mdo"); err != nil {
+	if status, err := ctx.Status(feature, target); err != nil {
 		panic(err)
 	} else {
 		fmt.Printf("The mprotect feature has the status: %s\n", status)
