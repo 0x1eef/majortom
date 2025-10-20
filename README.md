@@ -7,6 +7,8 @@ restore and query feature states for a given file.
 
 ## Context
 
+#### Background
+
 The control package can enable or disable security features
 that are managed by the [HardenedBSD](https://hardenedbsd.org)
 kernel on a per-file basis. The package is not pure Go and
@@ -18,6 +20,15 @@ Since HardenedBSD does not provide system calls that can enable or
 disable feature state that leaves the primary interface as the
 C libraries that HardenedBSD does provide. In this case, that interface is
 [libhbsdcontrol](https://git.hardenedbsd.org/hardenedbsd/hardenebsd).
+
+#### Motivation
+
+The main motivation behind this project was to learn more about Go.
+I was already familiar with the libhbsdcontrol interface, and since I
+stood to learn a lot in the process, I decided to create Go bindings
+for libhbsdcontrol. Over time the library has grown and improved as
+my Go skills also improved, and I ended up building a new utility
+with it named [control(8)](https://github.com/0x1eef/control).
 
 ## Examples
 
@@ -160,15 +171,6 @@ The install process is more or less straight forward
 * [github.com/@0x1eef](https://github.com/0x1eef/majortom#readme)
 * [gitlab.com/@0x1eef](https://gitlab.com/0x1eef/majortom#about)
 * [hardenedbsd.org/@0x1eef](https://git.HardenedBSD.org/0x1eef/majortom#about)
-
-## Motivation
-
-The main motivation behind this project was to learn more about Go.
-I was already familiar with the libhbsdcontrol interface, and since I
-stood to learn a lot in the process, I decided to create Go bindings
-for libhbsdcontrol. Over time the library has grown and improved as
-my Go skills also improved, and I ended up using it in a new utility
-I wrote named [control(8)](https://github.com/0x1eef/control).
 
 ## License
 
