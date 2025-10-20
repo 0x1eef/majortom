@@ -5,7 +5,7 @@ library for the [HardenedBSD](https://git.hardenedbsd.org/hardenedbsd/hardenedbs
 operating system. The library provides an interface that can enable, disable,
 restore and query feature states for a given file.
 
-## Background
+## Context
 
 The control package can enable or disable security features
 that are managed by the [HardenedBSD](https://hardenedbsd.org)
