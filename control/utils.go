@@ -27,11 +27,12 @@ func gostrings(cstr **C.char) []string {
 }
 
 func handle(result C.int) error {
-	if result == 0 {
+	switch result {
+	case 0:
 		return nil
-	} else if result == -1 {
+	case -1:
 		return errors.New("an unknown error happened")
-	} else {
+	default:
 		return syscall.Errno(result)
 	}
 }
