@@ -5,6 +5,9 @@
 #include <unistd.h>
 
 static int
+OPEN_FLAGS = O_PATH | O_CLOEXEC | O_NOFOLLOW;
+
+static int
 set_feature(hbsdctrl_ctx_t*, const char*, const char*, int);
 
 int
@@ -40,7 +43,7 @@ set_feature(hbsdctrl_ctx_t* ctx, const char* name, const char* path, int state)
         res = -1;
         goto done;
     }
-    if ((fd = open(path, O_PATH | O_NOFOLLOW)) == -1) {
+    if ((fd = open(path, OPEN_FLAGS)) == -1) {
         res = -1;
         goto done;
     }
