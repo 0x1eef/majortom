@@ -4,8 +4,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-static int
-OPEN_FLAGS = O_PATH | O_CLOEXEC | O_NOFOLLOW;
+static int OPEN_FLAGS = O_PATH | O_CLOEXEC | O_NOFOLLOW;
 
 static int
 set_feature(hbsdctrl_ctx_t*, const char*, const char*, int);
